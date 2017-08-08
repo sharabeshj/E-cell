@@ -75,7 +75,7 @@ io.on('connection',function(socket) {
       if (err) throw err;
       con.query("SELECT * FROM FORM", function (err, result, fields) {
         if (err) throw err;
-        socket.emit('result', result);
+        io.emit('result', result);
       });
     });
   });
