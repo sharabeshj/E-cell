@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FORM</title>
+<meta charset=UTF-8>
+<meta name="viewpoint" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" type="text/css" href="form.css">
+</head>
+<body>
+<header>
+<h2>form
+</h2>
+</header>
+<button onclick="funcnew()">SHOW/HIDE</button>
+<form class="f">
+<label><b>NAME:</b></label>
+<input type="text" name="name" id="name" placeholder="enter name here">
+<br>
+<br>
+<label><b>NUMBER:</b></label>
+<input type="text" name="number" id="number" placeholder="enter number here">
+<br>
+<br>
+<label><b>EMAIL:</b></label>
+<input type="email" name="email" id="email" placeholder="enter email id here">
+<br>
+<br>
+<label><b>DEPARTMENT:</b></label>
+<select name="department" id="department">
+	<option value=NULL>department</option>
+	<option value="chem">Chemical</option>
+	<option value="civil">Civil</option>
+	<option value="ece">ECE</option>
+	<option value="eee">EEE</option>
+	<option value="cs">ComputerScience</option>
+	<option value="prod">Production</option>
+	<option value="meta">Metallurgy</option>
+</select>
+<label><b>YEAR:</b></label>
+<select name="year" id="year">
+	<option value=null>year</option>
+	<option value="1">1st year</option>
+	<option value="2">2nd year</option>
+	<option value="3">3rd year</option>
+	<option value="4">4th year</option>
+</select>
+<br>
+<br>
+<label><b>EVENT</b></label>
+<select name="event" id="event">
+  <option value="NULL">event</option>
+  <option value="webops">WebOps</option>
+  <option value="CR">Corporate Realtions</option>
+  <opton value="marketing">Marketing></option>
+  <option value="MR">Media Relation</option>
+</select>
+<br>
+<br>
+<input type="text" name="resume" id="resume" placeholder="enter gdrive link">
+<br>
+<br>
+<button type = "button" onclick="ajax()">submit</button>
+<button type="button" onclick="reset(); func() ">reset</button>
+<br>
+<p id="demo"></p>
+</form>
+<div id="op"></div>
+<script src='/socket.io/socket.io.js'></script>
+<script>
+/*var file,
+      reader = new FileReader();
+function upload(){
+  // Upload the file to Google Drive
+  reader.onloadend = function(e) {
+    google.script.run
+      .withSuccessHandler(showMessage)
+      .uploadFileToGoogleDrive(
+         e.target.result, file.name,
+         $('input#name').val(),
+         $('input#email').val()
+      );
+  };
+    file = $('#file')[0].files[0];
+    showMessage("Uploading file..");
+    reader.readAsDataURL(file);
+}
+  function showMessage(e) {
+    $('#progress').html(e);
+  }
+*/
+  function ajax(){
+    console.log("Hey");
+    var xhttp=new XMLHttpRequest();
+    var name=document.getElementById("name").value;
+    var number=document.getElementById("number").value;
+    var events=document.getElementById("event").value;
+    var email=document.getElementById("email").value;
+    var department=document.getElementById("department").value;
+    var year=document.getElementById("year").value;
+    var resume=document.getElementById("resume").value;
+    xhttp.onreadystatechange=function(){
+      console.log("readystate", this.readyState);
+      if(this.readyState==4&&this.status==200) {
+        console.log("Hi");
+        document.getElementById("demo").innerHTML=this.responseText;
+				socket.emit('trigger',{});
+    }
+    else document.getElementById("demo").innerHTML="Please Wait..."
+  }
+    //    console.log("Hey");
+    xhttp.open("POST",'/?name='+name+'&number='+number+'&email='+email+'&event='+events+'&department='+department+'&year='+year+'&resume='+resume);
+    xhttp.send();
+  }
+	function func()
+	{
+		//document.getElementById("demo").parentNode.removeChild( document.getElementById("demo"));
+		var x=document.getElementById("demo");
+		x.style.display='none';
+	}
+	function funcnew()
+	{
+		var y=document.getElementById("op");
+		if (y.style.display === 'none') {
+        y.style.display = 'block';
+    } else {
+        y.style.display = 'none';
+    }
+	}
+	var socket=io();
+
+  socket.on('connect', function() {
+  console.log("connection requested");
+  });
+
+  socket.on('disconnect',function() {
+    console.log('cannot connect');
+	});
+
+	socket.on('result',function(result){
+		//console.log(result);
+		var i=0;
+		console.log(result.length);
+		while(i<result.length){
+		console.log("Hi", result);
+		var div = document.getElementById("op")
+		var para=document.createElement("P");
+		var node= document.createTextNode(i+1 + ")" + result[i].NAME + " of " +result[i].DEPARTMENT + " has registered for event " + result[i].EVENT);
+		para.setAttribute("id_",i+1);
+		para.appendChild(node);
+		div.appendChild(para);
+		i++;
+	}
+});
+</script>
+</body>
+</html>
