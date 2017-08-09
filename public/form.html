@@ -138,18 +138,15 @@ function upload(){
 
 	socket.on('result',function(result){
 		//console.log(result);
-		var i=0;
-		console.log(result.length);
-		while(i<result.length){
-		console.log("Hi", result);
+		var i=result.length-1;
+	//	console.log(result.length);
+		//console.log("Hi", result);
 		var div = document.getElementById("op")
 		var para=document.createElement("P");
-		var node= document.createTextNode(i+1 + ")" + result[i].NAME + " of " +result[i].DEPARTMENT + " has registered for event " + result[i].EVENT);
+		var node= document.createTextNode(result[i].NAME + " of " +result[i].DEPARTMENT + " has registered for event " + result[i].EVENT);
 		para.setAttribute("id_",i+1);
 		para.appendChild(node);
 		div.appendChild(para);
-		i++;
-	}
 });
 </script>
 </body>
